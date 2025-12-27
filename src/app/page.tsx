@@ -390,11 +390,25 @@ export default function Home() {
     }
   }
 
+  const [remainingFacts, setRemainingFacts] = useState(() => [...catFunFacts])
+
   const handleFunFact = () => {
-    const randomFact = catFunFacts[Math.floor(Math.random() * catFunFacts.length)]
-    setCurrentFunFact(randomFact)
-    setShowFunFact(true)
-    setScore((prev) => prev + 15)
+    setRemainingFacts((prev) => {
+      // kalau habis, reset lagi (kalau kamu mau stop total, ganti return prev)
+      if (prev.length === 0) return [...catFunFacts]
+
+      const idx = Math.floor(Math.random() * prev.length)
+      const chosen = prev[idx]
+
+      setCurrentFunFact(chosen) 
+      setShowFunFact(true)
+      setScore((s) => s + 15)
+
+      // hapus yang kepilih supaya ga mungkin kepilih lagi
+      return prev.filter((_, i) => i !== idx)
+    })
+  }
+
 
     // Change cat emoji
     const randomCat = catEmojis[Math.floor(Math.random() * catEmojis.length)]
